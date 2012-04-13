@@ -1,0 +1,62 @@
+=== uLogin - виджет авторизации через социальные сети ===
+Donate link: http://ulogin.ru/
+Tags: ulogin, login, social, authorization
+Requires at least: 2.0
+Tested up to: 2.0
+Stable widget tag: 1.7
+License: GPL3
+
+Форма авторизации uLogin через социальные сети. Улучшенный аналог loginza.
+
+== Description ==
+
+uLogin — это инструмент, который позволяет пользователям получить единый доступ к различным Интернет-сервисам без необходимости повторной регистрации,
+а владельцам сайтов — получить дополнительный приток клиентов из социальных сетей и популярных порталов (Google, Яндекс, Mail.ru, ВКонтакте, Facebook и др.)
+
+== Installation ==
+
+1. Распакуйте архив с плагином в директорию с kasseler cms, перезаписав все файлы (об изменениях смотрите ниже).
+2. В случае использования стандартного шаблона kasseler2, виджет можно наблюдать на верхней панеле, рядом с формой логина.
+3. Если используется нестандартный шаблон kasseler2, то следует добавить вызов виджета в основной шаблон index.tpl следующим образом :
+  <?php
+  $redirect_url = urlencode( 'http://'.get_host_name().'/index.php?module=account&do=sign');
+  if(!is_user())
+    echo "<div style='float:right;margin: 5px;'>
+  <script src='http://ulogin.ru/js/ulogin.js'></script>       
+  <div id='uLogin' 
+  x-ulogin-params='display=small;fields=first_name,last_name,email,nickname,bdate,sex,photo;providers=vkontakte,odnoklassniki,mailru,facebook;hidden=twitter,google,yandex,livejournal,openid,lastfm,linkedin,liveid,soundcloud,steam;redirect_uri={$redirect_url}'></div>
+  </div>";
+  ?>            
+
+== Список измененний в файлах kasseler сms:
+1. Добавлено подключение хуков в /includes/function/init.php :
+  foreach(load_includes('.*?\.php', 'hooks/autoload/') as $filename) require_once $filename;
+после строки:
+  //Подключение функций системы
+  $main->init_function('templates', 'hooks', 'functions', 'replace', 'gets', 'bool', 'kernel', 'forms');
+2. Изменено получение аватара в /blocks/block-user_menu.php :
+  $avatar = $main->user['user_group'] == get_ulogin_group() ? $main->user['user_avatar'] : $userconf['directory_avatar'].$main->user['user_avatar'];
+  адрес аватара {$userconf['directory_avatar']}{$main->user['user_avatar']}  заменен на {$avatar}
+3.Добавлен вызов хуков в /modules/account/index.php:
+- в функцию sign(): if(hook_check(__FUNCTION__)) hook();  		// такой вызов хука позволяет выполнить его в начале функции
+- в функцию controls(): if(hook_check(__FUNCTION__)) return hook();   	//стандартный вызов хука
+- в функцию save_controls(): if(hook_check(__FUNCTION__)) hook();  	// такой вызов хука позволяет выполнить его в начале функции
+- в функцию information(): if(hook_check(__FUNCTION__)) return hook();	//стандартный вызов хука  
+4. Добавлена директория для хуков /hooks/autoload/
+5. Добавлена иконка группы пользователей uLogin /includes/images/groups/ulogin.png
+
+== Frequently Asked Questions ==
+
+= Нужно ли где-то регистрироваться, чтобы плагин заработал? =
+
+Нет, плагин заработает сразу после установки!
+
+== Screenshots ==
+
+1. Форма комментирования
+
+== Changelog ==
+
+Добавлена новая страница настроек плагина, где можно изменять внешний вид вджета
+
+== Upgrade Notice ==
