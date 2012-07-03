@@ -16,7 +16,7 @@ if(!is_user())
 echo "<div style='float:right;margin: 5px;'>
 <script src='http://ulogin.ru/js/ulogin.js'></script>       
 <div id='uLogin' 
-x-ulogin-params='display=small;fields=first_name,last_name,email,nickname,bdate,sex,photo;providers=vkontakte,odnoklassniki,mailru,facebook;hidden=twitter,google,yandex,livejournal,openid,lastfm,linkedin,liveid,soundcloud,steam;redirect_uri={$redirect_url}'></div>
+x-ulogin-params='display=small;fields=first_name,last_name,email,nickname,bdate,sex,photo;providers=vkontakte,odnoklassniki,mailru,facebook;hidden=other;redirect_uri={$redirect_url}'></div>
 </div>";
 ?>            
 <div class="loginform">
